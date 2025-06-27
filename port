@@ -61,13 +61,13 @@ list_tunnels() {
 }
 
 print_help() {
-  echo "🧪 port script helper!!!"
+  echo "🧪 port script helper by steeldev heh!!!"
   echo "usage:"
-  echo "  ./port add <port>        add tunnel for local port"
-  echo "  ./port stop <port>       stop 1 tunnel"
-  echo "  ./port stop all          kill all tunnels"
-  echo "  ./port list tunnels      show tunnels that still live"
-  echo "  ./port help              this help screen lol"
+  echo "  port add <port>        add tunnel for local port"
+  echo "  port stop <port>       stop 1 tunnel"
+  echo "  port stop all          kill all tunnels"
+  echo "  port list tunnels      show tunnels that still live"
+  echo "  port help              this help screen lol"
 }
 
 case "$1" in
