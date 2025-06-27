@@ -1,0 +1,104 @@
+#!/bin/bash
+
+DB_FILE="/tmp/port_tunnels.db"
+SERVER="124.6.63.23"
+USER="tunnel"
+
+mkdir -p /tmp
+touch "$DB_FILE"
+
+add_tunnel() {
+  LOCAL_PORT=$1
+  TMPFILE=$(mktemp)
+  ssh -N -R 0:localhost:$LOCAL_PORT $USER@$SERVER >"$TMPFILE" 2>&1 &
+  SSH_PID=$!
+  sleep 1
+  if grep -q "Allocated port" "$TMPFILE"; then
+    REMOTE_PORT=$(grep "Allocated port" "$TMPFILE" | grep -oP '\d{4,5}')
+    echo "$LOCAL_PORT:$REMOTE_PORT:$SSH_PID" >> "$DB_FILE"
+    echo "✅ port $LOCAL_PORT forwarded to $SERVER:$REMOTE_PORT, WWW!!!"
+  else
+    echo "❌ tunnel failed. output:"
+    cat "$TMPFILE"
+    kill $SSH_PID
+  fi
+  rm "$TMPFILE"
+}
+
+stop_tunnel() {
+  PORT=$1
+  TMP=$(mktemp)
+  while IFS=: read -r LPORT RPORT PID; do
+    if [[ "$LPORT" == "$PORT" ]]; then
+      kill "$PID" 2>/dev/null
+      echo "🛑 stopped tunnel for port $LPORT, GONE!!!"
+    else
+      echo "$LPORT:$RPORT:$PID" >> "$TMP"
+    fi
+  done < "$DB_FILE"
+  mv "$TMP" "$DB_FILE"
+}
+
+stop_all() {
+  while IFS=: read -r LPORT RPORT PID; do
+    kill "$PID" 2>/dev/null
+    echo "🛑 stopped tunnel for port $LPORT, GONE!!!"
+  done < "$DB_FILE"
+  > "$DB_FILE"
+}
+
+list_tunnels() {
+  if [[ ! -s "$DB_FILE" ]]; then
+    echo "ℹ️  no tunnels rn sorry 😭"
+    return
+  fi
+  echo "🔁 active tunnels rn:"
+  while IFS=: read -r LPORT RPORT PID; do
+    if ps -p "$PID" > /dev/null 2>&1; then
+      echo " - $SERVER:$RPORT ➜ localhost:$LPORT (pid $PID)"
+    fi
+  done < "$DB_FILE"
+}
+
+print_help() {
+  echo "🧪 port script helper!!!"
+  echo "usage:"
+  echo "  ./port add <port>        add tunnel for local port"
+  echo "  ./port stop <port>       stop 1 tunnel"
+  echo "  ./port stop all          kill all tunnels"
+  echo "  ./port list tunnels      show tunnels that still live"
+  echo "  ./port help              this help screen lol"
+}
+
+case "$1" in
+  add)
+    if [[ -n "$2" ]]; then
+      add_tunnel "$2"
+    else
+      echo "usage: ./port add <local_port>"
+    fi
+    ;;
+  stop)
+    if [[ "$2" == "all" ]]; then
+      stop_all
+    elif [[ -n "$2" ]]; then
+      stop_tunnel "$2"
+    else
+      echo "usage: ./port stop <local_port|all>"
+    fi
+    ;;
+  list)
+    if [[ "$2" == "tunnels" ]]; then
+      list_tunnels
+    else
+      echo "usage: ./port list tunnels"
+    fi
+    ;;
+  help)
+    print_help
+    ;;
+  *)
+    echo "❓ unknown command: $1"
+    echo "try: ./port help"
+    ;;
+esac
