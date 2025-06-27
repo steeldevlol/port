@@ -84,14 +84,14 @@ case "$1" in
     elif [[ -n "$2" ]]; then
       stop_tunnel "$2"
     else
-      echo "usage: ./port stop <local_port|all>"
+      echo "usage: port stop <local_port|all>"
     fi
     ;;
   list)
     if [[ "$2" == "tunnels" ]]; then
       list_tunnels
     else
-      echo "usage: ./port list tunnels"
+      echo "usage: port list tunnels"
     fi
     ;;
   help)
@@ -99,6 +99,6 @@ case "$1" in
     ;;
   *)
     echo "❓ unknown command: $1"
-    echo "try: ./port help"
+    echo "try: port help"
     ;;
 esac
