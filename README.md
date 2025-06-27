@@ -1,16 +1,25 @@
 # Steeldev's Port
 
-**Port is used to create tunnels like serveo if you dont have port forwarding**
+Port is used to create tunnels like Serveo if you don’t have port forwarding.
 
-# Installing Port
+---
 
-Just run this command: **apt update && apt install git -y && cd ~ && git clone https://github.com/steeldevlol/port && chmod +x port/port && mv port/port /bin/port && clear && rm -rf ~/port && echo '✅ port installed successfully, type "port help" to use it.'**
-and port should be installed!
+## Installing Port
 
-# How to use Port?
+Run this command in your terminal:
 
-Run _port help_ to see all commands for port.
+apt update && apt install git -y && cd ~ && git clone https://github.com/steeldevlol/port && chmod +x port/port && mv port/port /bin/port && clear && rm -rf ~/port && echo '✅ port installed successfully, type "port help" to use it.'
 
-# Need help?
+---
 
-Join our [discord server](https://discord.gg/CyCVdGBmWH/)!
+## How to Use Port?
+
+Run the following to see all available commands:
+
+port help
+
+---
+
+## Need Help?
+
+Join our [Discord server](https://discord.gg/CyCVdGBmWH/)
