@@ -10,7 +10,7 @@ touch "$DB_FILE"
 add_tunnel() {
   LOCAL_PORT=$1
   TMPFILE=$(mktemp)
-  ssh -N -R 0:localhost:$LOCAL_PORT $USER@$SERVER >"$TMPFILE" 2>&1 &
+  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -N -R 0:localhost:$LOCAL_PORT $USER@$SERVER >"$TMPFILE" 2>&1 &
   SSH_PID=$!
   sleep 1
   if grep -q "Allocated port" "$TMPFILE"; then
