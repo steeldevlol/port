@@ -60,6 +60,12 @@ list_tunnels() {
   done < "$DB_FILE"
 }
 
+reset_all() {
+  > "$DB_FILE"
+  pkill -9 ssh 2>/dev/null
+  echo "🧼 reset done"
+}
+
 print_help() {
   echo "🧪 port script helper by steeldev heh!!!"
   echo "usage:"
@@ -67,6 +73,7 @@ print_help() {
   echo "  port stop <port>       stop 1 tunnel"
   echo "  port stop all          kill all tunnels"
   echo "  port list tunnels      show tunnels that still live"
+  echo "  port reset             resets all tunnels and database"
   echo "  port help              this help screen lol"
 }
 
