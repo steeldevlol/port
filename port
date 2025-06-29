@@ -73,7 +73,7 @@ print_help() {
   echo "  port stop <port>       stop 1 tunnel"
   echo "  port stop all          kill all tunnels"
   echo "  port list tunnels      show tunnels that still live"
-  echo "  port reset             resets all tunnels and database"
+  echo "  port reset             kill ALL ssh procs + wipe DB"
   echo "  port help              this help screen lol"
 }
 
@@ -100,6 +100,9 @@ case "$1" in
     else
       echo "usage: port list tunnels"
     fi
+    ;;
+  reset)
+    reset
     ;;
   help)
     print_help
