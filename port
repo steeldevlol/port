@@ -14,7 +14,7 @@ add_tunnel() {
   SSH_PID=$!
   sleep 1
   if grep -q "Allocated port" "$TMPFILE"; then
-    REMOTE_PORT=$(grep "Allocated port" "$TMPFILE" | grep -oP '\d{4,5}')
+    REMOTE_PORT=$(grep "Allocated port" "$TMPFILE" | grep -oP '\d{4,5}' | head -n1)
     echo "$LOCAL_PORT:$REMOTE_PORT:$SSH_PID" >> "$DB_FILE"
     echo "✅ port $LOCAL_PORT forwarded to $SERVER:$REMOTE_PORT, WWW!!!"
   else
