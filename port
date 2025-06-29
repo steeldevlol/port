@@ -61,9 +61,15 @@ list_tunnels() {
 }
 
 reset() {
-  > "$DB_FILE"
-  pkill -9 ssh 2>/dev/null
-  echo "🧼 reset done"
+  echo "⚠️  resetting port will also stop this ssh connection, you will be disconnected, is that ok? (y/n)"
+  read -r CONFIRM
+  if [[ "$CONFIRM" =~ ^[Yy]$ ]]; then
+    > "$DB_FILE"
+    pkill -9 ssh 2>/dev/null
+    echo "🧼 reset done"
+  else
+    echo "🚫 reset cancelled"
+  fi
 }
 
 print_help() {
