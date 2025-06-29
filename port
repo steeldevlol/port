@@ -60,7 +60,7 @@ list_tunnels() {
   done < "$DB_FILE"
 }
 
-reset_all() {
+reset() {
   > "$DB_FILE"
   pkill -9 ssh 2>/dev/null
   echo "🧼 reset done"
